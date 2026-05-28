@@ -20,16 +20,16 @@
 
   <style>
     :root {
-      --bg-primary: #111111;
-      --bg-secondary: #1a1a1a;
-      --bg-card: #222222;
-      --bg-card-hover: #2a2a2a;
+      --bg-primary: #1b1b1b;
+      --bg-secondary: #222222;
+      --bg-card: #2a2a2a;
       --text-primary: #ffffff;
-      --text-secondary: #999999;
+      --text-secondary: #a0a0a0;
       --accent: #c9a84c;
-      --accent-soft: rgba(201, 168, 76, 0.12);
       --accent-hover: #d4b85e;
-      --nav-height: 72px;
+      --accent-soft: rgba(201, 168, 76, 0.12);
+      --nav-height: 64px;
+      --header-height: 52px;
       --safe-top: env(safe-area-inset-top, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
     }
@@ -40,38 +40,36 @@
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg-primary);
       color: var(--text-primary);
-      min-height: 100vh;
-      min-height: 100dvh;
-      padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + 20px);
-      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+      height: 100vh;
+      height: 100dvh;
+      -webkit-user-select: none;
+      user-select: none;
     }
-
-    a { color: inherit; text-decoration: none; }
 
     /* ── HEADER ── */
     .app-header {
-      position: sticky;
-      top: 0;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: calc(var(--header-height) + var(--safe-top));
       padding-top: var(--safe-top);
       background: var(--bg-primary);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      z-index: 1000;
-    }
-
-    .header-inner {
+      border-bottom: 1px solid rgba(255,255,255,0.08);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 20px;
+      padding-left: 12px;
+      padding-right: 12px;
+      z-index: 1000;
     }
 
     .header-left {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 10px;
     }
 
-    .menu-btn {
+    .hdr-btn {
       background: none;
       border: none;
       color: var(--text-primary);
@@ -80,423 +78,87 @@
       border-radius: 10px;
       display: flex;
       align-items: center;
-      transition: background 0.2s;
+      justify-content: center;
+      transition: background 0.15s;
       -webkit-tap-highlight-color: transparent;
     }
 
-    .menu-btn:active { background: rgba(255,255,255,0.08); }
-
-    .header-logo {
-      height: 36px;
-      width: auto;
-      border-radius: 6px;
-    }
+    .hdr-btn:active { background: rgba(255,255,255,0.08); }
+    .hdr-btn.muted { color: var(--text-secondary); }
 
     .header-title {
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-    }
-
-    .header-actions {
-      display: flex;
-      gap: 4px;
-    }
-
-    .icon-btn {
-      background: none;
-      border: none;
-      color: var(--text-secondary);
-      cursor: pointer;
-      padding: 8px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      transition: all 0.2s;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .icon-btn:active { background: rgba(255,255,255,0.08); color: var(--text-primary); }
-
-    /* ── HERO BANNER ── */
-    .hero {
-      position: relative;
-      margin: 16px;
-      border-radius: 20px;
-      overflow: hidden;
-      background: linear-gradient(135deg, #2a2318 0%, #1a1510 100%);
-      border: 1px solid rgba(201, 168, 76, 0.15);
-    }
-
-    .hero-content {
-      padding: 28px 24px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .hero-label {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: var(--accent);
-      margin-bottom: 10px;
-    }
-
-    .hero h1 {
-      font-size: 22px;
-      font-weight: 800;
-      line-height: 1.3;
-      margin-bottom: 6px;
-    }
-
-    .hero p {
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.5;
-      margin-bottom: 18px;
-    }
-
-    .hero-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 22px;
-      background: var(--accent);
-      color: #000;
-      border: none;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .hero-btn:active { transform: scale(0.96); }
-
-    .hero-cross {
-      position: absolute;
-      right: -10px;
-      top: -10px;
-      width: 140px;
-      height: 140px;
-      opacity: 0.06;
-    }
-
-    /* ── SERVICE TIMES STRIP ── */
-    .times-strip {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 14px 20px;
-      margin: 0 16px 16px;
-      background: var(--bg-card);
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .times-icon {
-      width: 40px;
-      height: 40px;
-      background: var(--accent-soft);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .times-icon svg { color: var(--accent); }
-
-    .times-info {
-      flex: 1;
-    }
-
-    .times-label {
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 2px;
-    }
-
-    .times-detail {
-      font-size: 12px;
-      color: var(--text-secondary);
-    }
-
-    /* ── SECTION ── */
-    .section {
-      padding: 8px 16px;
-    }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 14px;
-      padding: 0 4px;
-    }
-
-    .section-title {
-      font-size: 17px;
-      font-weight: 700;
-    }
-
-    .section-link {
-      font-size: 13px;
-      color: var(--accent);
-      font-weight: 600;
-    }
-
-    /* ── QUICK ACTION GRID ── */
-    .quick-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-
-    .quick-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      padding: 18px 8px 14px;
-      background: var(--bg-card);
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.06);
-      cursor: pointer;
-      transition: all 0.2s;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .quick-item:active {
-      transform: scale(0.95);
-      background: var(--bg-card-hover);
-    }
-
-    .quick-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .quick-icon svg { width: 22px; height: 22px; }
-
-    .quick-icon.watch { background: rgba(239, 68, 68, 0.12); color: #ef4444; }
-    .quick-icon.events { background: rgba(59, 130, 246, 0.12); color: #3b82f6; }
-    .quick-icon.give { background: rgba(16, 185, 129, 0.12); color: #10b981; }
-    .quick-icon.connect { background: var(--accent-soft); color: var(--accent); }
-
-    .quick-label {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-secondary);
-    }
-
-    /* ── CARD LIST ── */
-    .card-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .card {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 16px;
-      background: var(--bg-card);
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.06);
-      cursor: pointer;
-      transition: all 0.15s;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .card:active {
-      transform: scale(0.98);
-      background: var(--bg-card-hover);
-    }
-
-    .card-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 11px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      background: rgba(255,255,255,0.05);
-    }
-
-    .card-icon svg { width: 20px; height: 20px; color: var(--text-secondary); }
-
-    .card-body { flex: 1; min-width: 0; }
-
-    .card-title {
-      font-size: 15px;
-      font-weight: 600;
-      margin-bottom: 2px;
-    }
-
-    .card-desc {
-      font-size: 13px;
-      color: var(--text-secondary);
-      line-height: 1.4;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .card-arrow {
-      color: rgba(255,255,255,0.2);
-      flex-shrink: 0;
-    }
-
-    /* ── HORIZONTAL SCROLL CARDS ── */
-    .scroll-row {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      padding-bottom: 4px;
-      scrollbar-width: none;
-    }
-
-    .scroll-row::-webkit-scrollbar { display: none; }
-
-    .scroll-card {
-      flex: 0 0 240px;
-      scroll-snap-align: start;
-      background: var(--bg-card);
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.06);
-      padding: 20px;
-      cursor: pointer;
-      transition: all 0.15s;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .scroll-card:active {
-      transform: scale(0.97);
-    }
-
-    .scroll-card-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 14px;
-    }
-
-    .scroll-card-icon svg { width: 22px; height: 22px; }
-
-    .scroll-card h3 {
-      font-size: 15px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .scroll-card p {
-      font-size: 13px;
-      color: var(--text-secondary);
-      line-height: 1.4;
-    }
-
-    .sc-children { background: rgba(249, 115, 22, 0.1); color: #f97316; }
-    .sc-students { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
-    .sc-adults { background: rgba(20, 184, 166, 0.1); color: #14b8a6; }
-    .sc-groups { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
-    .sc-missions { background: rgba(236, 72, 153, 0.1); color: #ec4899; }
-
-    /* ── CONTACT BAR ── */
-    .contact-section {
-      margin: 24px 16px;
-      padding: 24px 20px;
-      background: var(--bg-card);
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.06);
-      text-align: center;
-    }
-
-    .contact-section h3 {
       font-size: 16px;
       font-weight: 700;
-      margin-bottom: 4px;
+      letter-spacing: 0.3px;
     }
 
-    .contact-section .address {
-      font-size: 13px;
-      color: var(--text-secondary);
-      line-height: 1.5;
-      margin-bottom: 16px;
+    .header-logo {
+      height: 30px;
+      width: auto;
+      border-radius: 4px;
     }
 
-    .contact-actions {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-    }
-
-    .contact-btn {
+    .header-right {
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 10px 18px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 10px;
-      color: var(--text-primary);
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      -webkit-tap-highlight-color: transparent;
+      gap: 2px;
     }
 
-    .contact-btn:active { background: rgba(255,255,255,0.1); }
-    .contact-btn svg { width: 16px; height: 16px; }
-
-    .social-links {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      margin-top: 16px;
+    /* ── IFRAME ── */
+    .content-frame {
+      position: fixed;
+      top: calc(var(--header-height) + var(--safe-top));
+      left: 0; right: 0;
+      bottom: calc(var(--nav-height) + var(--safe-bottom));
+      border: none;
+      width: 100%;
+      height: 100%;
+      background: #fff;
     }
 
-    .social-link {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.06);
+    /* ── LOADING ── */
+    .loading-overlay {
+      position: fixed;
+      top: calc(var(--header-height) + var(--safe-top));
+      left: 0; right: 0;
+      bottom: calc(var(--nav-height) + var(--safe-bottom));
+      background: var(--bg-primary);
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      color: var(--text-secondary);
-      transition: all 0.2s;
-      -webkit-tap-highlight-color: transparent;
+      z-index: 500;
+      transition: opacity 0.4s ease;
     }
 
-    .social-link:active { background: rgba(255,255,255,0.1); color: var(--text-primary); }
-    .social-link svg { width: 18px; height: 18px; }
+    .loading-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid rgba(255,255,255,0.08);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-text {
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
 
     /* ── BOTTOM NAV ── */
     .bottom-nav {
       position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      bottom: 0; left: 0; right: 0;
       height: calc(var(--nav-height) + var(--safe-bottom));
       padding-bottom: var(--safe-bottom);
-      background: rgba(17, 17, 17, 0.92);
+      background: rgba(27, 27, 27, 0.94);
       -webkit-backdrop-filter: blur(20px);
       backdrop-filter: blur(20px);
       border-top: 1px solid rgba(255,255,255,0.08);
@@ -510,13 +172,13 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
-      padding: 8px 16px;
+      gap: 3px;
+      padding: 6px 14px;
       border: none;
       background: none;
       color: var(--text-secondary);
       cursor: pointer;
-      transition: all 0.2s;
+      transition: color 0.2s;
       -webkit-tap-highlight-color: transparent;
     }
 
@@ -530,7 +192,7 @@
       letter-spacing: 0.3px;
     }
 
-    /* ── SLIDE-OUT MENU ── */
+    /* ── SLIDE MENU ── */
     .menu-overlay {
       position: fixed;
       inset: 0;
@@ -547,9 +209,7 @@
 
     .slide-menu {
       position: fixed;
-      top: 0;
-      left: 0;
-      bottom: 0;
+      top: 0; left: 0; bottom: 0;
       width: 300px;
       max-width: 85vw;
       background: var(--bg-primary);
@@ -568,16 +228,8 @@
       border-bottom: 1px solid rgba(255,255,255,0.08);
     }
 
-    .menu-header h2 {
-      font-size: 18px;
-      font-weight: 800;
-    }
-
-    .menu-header p {
-      font-size: 13px;
-      color: var(--text-secondary);
-      margin-top: 4px;
-    }
+    .menu-header h2 { font-size: 18px; font-weight: 800; }
+    .menu-header p { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
 
     .menu-section {
       padding: 8px 0;
@@ -624,14 +276,13 @@
       line-height: 1.6;
     }
 
-    .menu-footer a { color: var(--accent); }
+    .menu-footer a { color: var(--accent); text-decoration: none; }
 
     /* ── NOTIFICATION PROMPT ── */
     .notif-prompt {
       position: fixed;
       bottom: calc(var(--nav-height) + var(--safe-bottom) + 16px);
-      left: 16px;
-      right: 16px;
+      left: 16px; right: 16px;
       background: var(--bg-card);
       border-radius: 18px;
       padding: 22px;
@@ -643,7 +294,6 @@
     }
 
     .notif-prompt.show { transform: translateY(0); }
-
     .notif-prompt h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
     .notif-prompt p { font-size: 14px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 18px; }
 
@@ -657,18 +307,16 @@
       font-size: 15px;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.2s;
       -webkit-tap-highlight-color: transparent;
     }
 
     .btn-enable { background: var(--accent); color: #000; }
-    .btn-enable:active { background: var(--accent-hover); }
     .btn-dismiss { background: rgba(255,255,255,0.08); color: var(--text-primary); }
 
     /* ── TOAST ── */
     .toast {
       position: fixed;
-      top: calc(var(--safe-top) + 70px);
+      top: calc(var(--safe-top) + var(--header-height) + 12px);
       left: 50%;
       transform: translateX(-50%) translateY(-100px);
       background: var(--bg-card);
@@ -685,250 +333,77 @@
     }
 
     .toast.show { transform: translateX(-50%) translateY(0); }
-
-    /* ── PAGES (tab content) ── */
-    .page { display: none; }
-    .page.active { display: block; }
   </style>
 </head>
 <body>
 
-  <!-- HEADER -->
+  <!-- ═══ HEADER ═══ -->
   <header class="app-header">
-    <div class="header-inner">
-      <div class="header-left">
-        <button class="menu-btn" onclick="toggleMenu()" aria-label="Menu">
-          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        </button>
-        <img src="https://images.squarespace-cdn.com/content/v1/659d8c7113cb9a4f53b20382/11fdb2ff-6018-441e-aefe-0c03a50c108d/Crew+Logos+%283%29.png?format=100w"
-             alt="CSBC" class="header-logo" onerror="this.style.display='none'">
-      </div>
-      <div class="header-actions">
-        <button class="icon-btn" onclick="requestNotifications()" aria-label="Notifications">
-          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-        </button>
-      </div>
+    <div class="header-left">
+      <button class="hdr-btn" onclick="toggleMenu()" aria-label="Menu">
+        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="19" y2="6"/><line x1="3" y1="11" x2="19" y2="11"/><line x1="3" y1="16" x2="19" y2="16"/></svg>
+      </button>
+      <img src="https://images.squarespace-cdn.com/content/v1/659d8c7113cb9a4f53b20382/11fdb2ff-6018-441e-aefe-0c03a50c108d/Crew+Logos+%283%29.png?format=100w"
+           alt="CSBC" class="header-logo" onerror="this.style.display='none'">
+      <span class="header-title" id="pageTitle">Home</span>
+    </div>
+    <div class="header-right">
+      <button class="hdr-btn muted" onclick="goBack()" aria-label="Back" id="backBtn" style="display:none">
+        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <button class="hdr-btn muted" onclick="goHome()" aria-label="Home">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </button>
+      <button class="hdr-btn muted" onclick="refreshFrame()" aria-label="Refresh">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      </button>
+      <button class="hdr-btn muted" onclick="requestNotifications()" aria-label="Notifications">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
     </div>
   </header>
 
-  <!-- ════════ HOME PAGE ════════ -->
-  <div class="page active" id="page-home">
-
-    <!-- Hero -->
-    <div class="hero">
-      <svg class="hero-cross" viewBox="0 0 100 100" fill="currentColor" opacity="1">
-        <rect x="42" y="10" width="16" height="80" rx="3"/>
-        <rect x="20" y="32" width="60" height="16" rx="3"/>
-      </svg>
-      <div class="hero-content">
-        <span class="hero-label">Welcome</span>
-        <h1>Cave Spring Baptist Church</h1>
-        <p>We are a people changed by the Gospel. Come worship with us!</p>
-        <a href="https://www.csbcroanoke.com/about" class="hero-btn">
-          Connect With Us
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </div>
-    </div>
-
-    <!-- Service Times -->
-    <div class="times-strip">
-      <div class="times-icon">
-        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><polyline points="10 5 10 10 13 12"/></svg>
-      </div>
-      <div class="times-info">
-        <div class="times-label">Sunday Worship</div>
-        <div class="times-detail">8:30am &amp; 11:00am &bull; 4873 Brambleton Ave</div>
-      </div>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="section">
-      <div class="section-header">
-        <h2 class="section-title">Quick Actions</h2>
-      </div>
-      <div class="quick-grid">
-        <a href="https://www.csbcroanoke.com/media/sermons" class="quick-item">
-          <div class="quick-icon watch">
-            <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          </div>
-          <span class="quick-label">Watch</span>
-        </a>
-        <a href="https://www.csbcroanoke.com/events" class="quick-item">
-          <div class="quick-icon events">
-            <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          </div>
-          <span class="quick-label">Events</span>
-        </a>
-        <a href="https://www.csbcroanoke.com/give" class="quick-item">
-          <div class="quick-icon give">
-            <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          </div>
-          <span class="quick-label">Give</span>
-        </a>
-        <a href="https://www.csbcroanoke.com/about" class="quick-item">
-          <div class="quick-icon connect">
-            <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
-          </div>
-          <span class="quick-label">Connect</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- Ministries -->
-    <div class="section">
-      <div class="section-header">
-        <h2 class="section-title">Ministries</h2>
-        <a href="https://www.csbcroanoke.com/new-page-2" class="section-link">See All</a>
-      </div>
-      <div class="scroll-row">
-        <a href="https://www.csbcroanoke.com/ministries-children" class="scroll-card">
-          <div class="scroll-card-icon sc-children">
-            <svg fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-          </div>
-          <h3>Children</h3>
-          <p>Nursery through 5th grade</p>
-        </a>
-        <a href="https://www.csbcroanoke.com/ministries-students" class="scroll-card">
-          <div class="scroll-card-icon sc-students">
-            <svg fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          </div>
-          <h3>Students</h3>
-          <p>Middle &amp; high school</p>
-        </a>
-        <a href="https://www.csbcroanoke.com/ministries-adults" class="scroll-card">
-          <div class="scroll-card-icon sc-adults">
-            <svg fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-          </div>
-          <h3>Adults</h3>
-          <p>Sunday school &amp; more</p>
-        </a>
-        <a href="https://www.csbcroanoke.com/small-groups" class="scroll-card">
-          <div class="scroll-card-icon sc-groups">
-            <svg fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          </div>
-          <h3>Small Groups</h3>
-          <p>Connect &amp; grow together</p>
-        </a>
-        <a href="https://www.csbcroanoke.com/missions" class="scroll-card">
-          <div class="scroll-card-icon sc-missions">
-            <svg fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-          </div>
-          <h3>Missions</h3>
-          <p>Local &amp; global outreach</p>
-        </a>
-      </div>
-    </div>
-
-    <!-- Explore -->
-    <div class="section">
-      <div class="section-header">
-        <h2 class="section-title">Explore</h2>
-      </div>
-      <div class="card-list">
-        <a href="https://www.csbcroanoke.com/about-us/when-you-visit" class="card">
-          <div class="card-icon"><svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
-          <div class="card-body">
-            <div class="card-title">Plan Your Visit</div>
-            <div class="card-desc">What to expect when you come</div>
-          </div>
-          <svg class="card-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 3 14 8 6 13"/></svg>
-        </a>
-        <a href="https://www.csbcroanoke.com/what-we-believe" class="card">
-          <div class="card-icon"><svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
-          <div class="card-body">
-            <div class="card-title">What We Believe</div>
-            <div class="card-desc">Our faith and doctrine</div>
-          </div>
-          <svg class="card-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 3 14 8 6 13"/></svg>
-        </a>
-        <a href="https://www.csbcroanoke.com/about-us/our-team" class="card">
-          <div class="card-icon"><svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-          <div class="card-body">
-            <div class="card-title">Our Team</div>
-            <div class="card-desc">Meet the pastors and staff</div>
-          </div>
-          <svg class="card-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 3 14 8 6 13"/></svg>
-        </a>
-        <a href="https://www.csbcroanoke.com/serve" class="card">
-          <div class="card-icon"><svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
-          <div class="card-body">
-            <div class="card-title">Serve</div>
-            <div class="card-desc">Find your place to serve</div>
-          </div>
-          <svg class="card-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 3 14 8 6 13"/></svg>
-        </a>
-        <a href="https://www.csbcroanoke.com/discipleship" class="card">
-          <div class="card-icon"><svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg></div>
-          <div class="card-body">
-            <div class="card-title">Discipleship</div>
-            <div class="card-desc">Grow in your faith</div>
-          </div>
-          <svg class="card-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 3 14 8 6 13"/></svg>
-        </a>
-        <a href="https://www.csbcroanoke.com/150" class="card">
-          <div class="card-icon"><svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-          <div class="card-body">
-            <div class="card-title">Our History</div>
-            <div class="card-desc">150+ years of faithfulness</div>
-          </div>
-          <svg class="card-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 3 14 8 6 13"/></svg>
-        </a>
-        <a href="https://www.csbcroanoke.com/digitalresources" class="card">
-          <div class="card-icon"><svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
-          <div class="card-body">
-            <div class="card-title">Digital Resources</div>
-            <div class="card-desc">Online tools for your journey</div>
-          </div>
-          <svg class="card-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 3 14 8 6 13"/></svg>
-        </a>
-        <a href="https://csbcroanoke.printful.me/" class="card">
-          <div class="card-icon"><svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
-          <div class="card-body">
-            <div class="card-title">Merch Store</div>
-            <div class="card-desc">CSBC apparel and gear</div>
-          </div>
-          <svg class="card-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 3 14 8 6 13"/></svg>
-        </a>
-      </div>
-    </div>
-
-    <!-- Contact -->
-    <div class="contact-section">
-      <h3>Cave Spring Baptist Church</h3>
-      <p class="address">
-        4873 Brambleton Ave, Roanoke, VA 24018<br>
-        Sunday Worship: 8:30am &amp; 11:00am
-      </p>
-      <div class="contact-actions">
-        <a href="tel:5409896136" class="contact-btn">
-          <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          Call
-        </a>
-        <a href="mailto:info@csbcroanoke.com" class="contact-btn">
-          <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          Email
-        </a>
-        <a href="https://maps.apple.com/?address=4873+Brambleton+Ave,+Roanoke,+VA+24018" class="contact-btn">
-          <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          Map
-        </a>
-      </div>
-      <div class="social-links">
-        <a href="https://www.instagram.com/csbcroanoke/" class="social-link" aria-label="Instagram">
-          <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-        </a>
-        <a href="https://facebook.com/csbcroanoke" class="social-link" aria-label="Facebook">
-          <svg fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-        </a>
-        <a href="https://www.youtube.com/channel/UCVXL8CO4ZSR3PHFg5Mz0gNg" class="social-link" aria-label="YouTube">
-          <svg fill="currentColor" viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="#111"/></svg>
-        </a>
-      </div>
-    </div>
+  <!-- ═══ LOADING ═══ -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <p class="loading-text">Loading...</p>
   </div>
 
-  <!-- ════════ SLIDE-OUT MENU ════════ -->
+  <!-- ═══ IFRAME ═══ -->
+  <iframe
+    id="mainFrame"
+    class="content-frame"
+    src=""
+    loading="eager"
+    allow="autoplay; fullscreen; encrypted-media"
+    title="Cave Spring Baptist Church"
+  ></iframe>
+
+  <!-- ═══ BOTTOM NAV ═══ -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-path="/" onclick="navigate('/', 'Home', this)">
+      <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span class="nav-label">Home</span>
+    </button>
+    <button class="nav-item" data-path="/media/sermons" onclick="navigate('/media/sermons', 'Watch', this)">
+      <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      <span class="nav-label">Watch</span>
+    </button>
+    <button class="nav-item" data-path="/events" onclick="navigate('/events', 'Events', this)">
+      <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span class="nav-label">Events</span>
+    </button>
+    <button class="nav-item" data-path="/about" onclick="navigate('/about', 'Connect', this)">
+      <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span class="nav-label">Connect</span>
+    </button>
+    <button class="nav-item" data-path="/give" onclick="navigate('/give', 'Give', this)">
+      <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      <span class="nav-label">Give</span>
+    </button>
+  </nav>
+
+  <!-- ═══ SLIDE MENU ═══ -->
   <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
   <aside class="slide-menu" id="slideMenu">
     <div class="menu-header">
@@ -938,89 +413,66 @@
 
     <div class="menu-section">
       <div class="menu-section-label">About Us</div>
-      <a href="https://www.csbcroanoke.com/about" class="menu-link"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg> Connect Card</a>
-      <a href="https://www.csbcroanoke.com/about-us/when-you-visit" class="menu-link"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> When You Visit</a>
-      <a href="https://www.csbcroanoke.com/new-page-1" class="menu-link"><svg fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg> Who We Are</a>
-      <a href="https://www.csbcroanoke.com/what-we-believe" class="menu-link"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> What We Believe</a>
-      <a href="https://www.csbcroanoke.com/150" class="menu-link"><svg fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Our History</a>
-      <a href="https://www.csbcroanoke.com/about-us/our-team" class="menu-link"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Our Team</a>
+      <button class="menu-link" onclick="navMenu('/about', 'Connect Card')"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg> Connect Card</button>
+      <button class="menu-link" onclick="navMenu('/about-us/when-you-visit', 'When You Visit')"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> When You Visit</button>
+      <button class="menu-link" onclick="navMenu('/new-page-1', 'Who We Are')"><svg fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg> Who We Are</button>
+      <button class="menu-link" onclick="navMenu('/what-we-believe', 'What We Believe')"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> What We Believe</button>
+      <button class="menu-link" onclick="navMenu('/150', 'Our History')"><svg fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Our History</button>
+      <button class="menu-link" onclick="navMenu('/about-us/our-team', 'Our Team')"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Our Team</button>
     </div>
 
     <div class="menu-section">
       <div class="menu-section-label">Ministries</div>
-      <a href="https://www.csbcroanoke.com/ministries-children" class="menu-link"><svg fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg> Children</a>
-      <a href="https://www.csbcroanoke.com/ministries-students" class="menu-link"><svg fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Students</a>
-      <a href="https://www.csbcroanoke.com/ministries-adults" class="menu-link"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Adults</a>
-      <a href="https://www.csbcroanoke.com/small-groups" class="menu-link"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Small Groups</a>
-      <a href="https://www.csbcroanoke.com/chinese-fellowship" class="menu-link"><svg fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Chinese Fellowship</a>
-      <a href="https://www.csbcroanoke.com/serve" class="menu-link"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Serve</a>
-      <a href="https://www.csbcroanoke.com/missions" class="menu-link"><svg fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Missions</a>
-      <a href="https://www.csbcroanoke.com/discipleship" class="menu-link"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg> Discipleship</a>
+      <button class="menu-link" onclick="navMenu('/ministries-children', 'Children')"><svg fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg> Children</button>
+      <button class="menu-link" onclick="navMenu('/ministries-students', 'Students')"><svg fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Students</button>
+      <button class="menu-link" onclick="navMenu('/ministries-adults', 'Adults')"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Adults</button>
+      <button class="menu-link" onclick="navMenu('/small-groups', 'Small Groups')"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg> Small Groups</button>
+      <button class="menu-link" onclick="navMenu('/chinese-fellowship', 'Chinese Fellowship')"><svg fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg> Chinese Fellowship</button>
+      <button class="menu-link" onclick="navMenu('/serve', 'Serve')"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Serve</button>
+      <button class="menu-link" onclick="navMenu('/missions', 'Missions')"><svg fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10"/></svg> Missions</button>
+      <button class="menu-link" onclick="navMenu('/discipleship', 'Discipleship')"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3"/></svg> Discipleship</button>
     </div>
 
     <div class="menu-section">
       <div class="menu-section-label">Events</div>
-      <a href="https://www.csbcroanoke.com/calendar" class="menu-link"><svg fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Calendar</a>
-      <a href="https://www.csbcroanoke.com/events" class="menu-link"><svg fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="14" x2="8" y2="14.01"/></svg> Upcoming Events</a>
+      <button class="menu-link" onclick="navMenu('/calendar', 'Calendar')"><svg fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Calendar</button>
+      <button class="menu-link" onclick="navMenu('/events', 'Upcoming Events')"><svg fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Upcoming Events</button>
     </div>
 
     <div class="menu-section">
       <div class="menu-section-label">Future Leaders</div>
-      <a href="https://www.csbcroanoke.com/apprenticeship" class="menu-link"><svg fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Apprenticeship</a>
-      <a href="https://www.csbcroanoke.com/summer-internships" class="menu-link"><svg fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Summer Internships</a>
+      <button class="menu-link" onclick="navMenu('/apprenticeship', 'Apprenticeship')"><svg fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Apprenticeship</button>
+      <button class="menu-link" onclick="navMenu('/summer-internships', 'Summer Internships')"><svg fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg> Summer Internships</button>
     </div>
 
     <div class="menu-section">
       <div class="menu-section-label">Media</div>
-      <a href="https://www.csbcroanoke.com/media/sermons" class="menu-link"><svg fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg> Messages</a>
-      <a href="https://www.csbcroanoke.com/testimonies" class="menu-link"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Testimonies</a>
-      <a href="https://www.csbcroanoke.com/ministries/worship" class="menu-link"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg> Music</a>
-      <a href="https://www.csbcroanoke.com/spiritual-growth" class="menu-link"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg> Spiritual Growth</a>
-      <a href="https://www.csbcroanoke.com/digitalresources" class="menu-link"><svg fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Digital Resources</a>
+      <button class="menu-link" onclick="navMenu('/media/sermons', 'Messages')"><svg fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg> Messages</button>
+      <button class="menu-link" onclick="navMenu('/testimonies', 'Testimonies')"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Testimonies</button>
+      <button class="menu-link" onclick="navMenu('/ministries/worship', 'Music')"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg> Music</button>
+      <button class="menu-link" onclick="navMenu('/spiritual-growth', 'Spiritual Growth')"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg> Spiritual Growth</button>
+      <button class="menu-link" onclick="navMenu('/digitalresources', 'Digital Resources')"><svg fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Digital Resources</button>
     </div>
 
     <div class="menu-section">
       <div class="menu-section-label">More</div>
-      <a href="https://www.csbcroanoke.com/give" class="menu-link"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Give</a>
-      <a href="https://csbcroanoke.printful.me/" class="menu-link"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> Merch</a>
-      <a href="https://www.csbcroanoke.com/communitycenter" class="menu-link"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Community Life Center</a>
+      <button class="menu-link" onclick="navMenu('/give', 'Give')"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Give</button>
+      <button class="menu-link" onclick="navMenu('/communitycenter', 'Community Life Center')"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> Community Life Center</button>
     </div>
 
     <div class="menu-footer">
       <p>
-        <a href="tel:5409896136">(540) 989-6136</a><br>
-        <a href="mailto:info@csbcroanoke.com">info@csbcroanoke.com</a><br><br>
+        <strong>Sunday Worship</strong><br>
+        8:30am &amp; 11:00am<br><br>
         4873 Brambleton Ave<br>
-        Roanoke, VA 24018
+        Roanoke, VA 24018<br><br>
+        <a href="tel:5409896136">(540) 989-6136</a><br>
+        <a href="mailto:info@csbcroanoke.com">info@csbcroanoke.com</a>
       </p>
     </div>
   </aside>
 
-  <!-- BOTTOM NAV -->
-  <nav class="bottom-nav">
-    <a href="https://www.csbcroanoke.com" class="nav-item active">
-      <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <span class="nav-label">Home</span>
-    </a>
-    <a href="https://www.csbcroanoke.com/media/sermons" class="nav-item">
-      <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-      <span class="nav-label">Watch</span>
-    </a>
-    <a href="https://www.csbcroanoke.com/events" class="nav-item">
-      <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      <span class="nav-label">Events</span>
-    </a>
-    <a href="https://www.csbcroanoke.com/about" class="nav-item">
-      <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      <span class="nav-label">Connect</span>
-    </a>
-    <a href="https://www.csbcroanoke.com/give" class="nav-item">
-      <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-      <span class="nav-label">Give</span>
-    </a>
-  </nav>
-
-  <!-- NOTIFICATION PROMPT -->
+  <!-- ═══ NOTIFICATION PROMPT ═══ -->
   <div class="notif-prompt" id="notifPrompt">
     <h3>Stay Connected</h3>
     <p>Get notified about services, events, and updates from Cave Spring Baptist Church.</p>
@@ -1030,10 +482,98 @@
     </div>
   </div>
 
-  <!-- TOAST -->
+  <!-- ═══ TOAST ═══ -->
   <div class="toast" id="toast"></div>
 
   <script>
+    // ═══════════════════════════════════════════
+    // CONFIGURATION — UPDATE THIS AFTER DEPLOYING YOUR CLOUDFLARE WORKER
+    // ═══════════════════════════════════════════
+    // Replace this with your Cloudflare Worker URL, e.g.:
+    // const PROXY_BASE = 'https://csbc-proxy.your-subdomain.workers.dev';
+    const PROXY_BASE = 'https://csbc-proxy.hunterwbolton.workers.dev';
+    // ═══════════════════════════════════════════
+
+    const frame = document.getElementById('mainFrame');
+    const overlay = document.getElementById('loadingOverlay');
+    const pageTitle = document.getElementById('pageTitle');
+    const backBtn = document.getElementById('backBtn');
+
+    // Navigation history for back button
+    let navHistory = [];
+    let currentPath = '/';
+
+    // ── INIT ──
+    function init() {
+      frame.src = PROXY_BASE + '/';
+    }
+
+    frame.addEventListener('load', () => {
+      setTimeout(() => overlay.classList.add('hidden'), 300);
+    });
+
+    // Listen for navigation messages from the proxied page
+    window.addEventListener('message', (e) => {
+      if (e.data && e.data.type === 'csbc-navigate') {
+        currentPath = e.data.path;
+        updateNavHighlight(currentPath);
+        backBtn.style.display = navHistory.length > 0 ? 'flex' : 'none';
+      }
+    });
+
+    // ── NAVIGATION ──
+    function navigate(path, title, btn) {
+      if (currentPath !== path) {
+        navHistory.push(currentPath);
+      }
+      currentPath = path;
+
+      overlay.classList.remove('hidden');
+      frame.src = PROXY_BASE + path;
+      pageTitle.textContent = title || 'CSBC';
+
+      // Update bottom nav active state
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      backBtn.style.display = navHistory.length > 0 ? 'flex' : 'none';
+    }
+
+    function navMenu(path, title) {
+      toggleMenu();
+      navigate(path, title);
+    }
+
+    function goHome() {
+      navHistory = [];
+      navigate('/', 'Home');
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+      document.querySelector('.nav-item[data-path="/"]').classList.add('active');
+    }
+
+    function goBack() {
+      if (navHistory.length > 0) {
+        const prev = navHistory.pop();
+        currentPath = prev;
+        overlay.classList.remove('hidden');
+        frame.src = PROXY_BASE + prev;
+        updateNavHighlight(prev);
+        backBtn.style.display = navHistory.length > 0 ? 'flex' : 'none';
+      }
+    }
+
+    function refreshFrame() {
+      overlay.classList.remove('hidden');
+      frame.src = frame.src;
+    }
+
+    function updateNavHighlight(path) {
+      document.querySelectorAll('.nav-item').forEach(b => {
+        b.classList.remove('active');
+        if (b.dataset.path === path) b.classList.add('active');
+      });
+    }
+
     // ── MENU ──
     function toggleMenu() {
       document.getElementById('menuOverlay').classList.toggle('open');
@@ -1042,26 +582,14 @@
 
     // ── NOTIFICATIONS ──
     function requestNotifications() {
-      if (!('Notification' in window)) {
-        showToast('Notifications not supported');
-        return;
-      }
-      if (Notification.permission === 'granted') {
-        showToast('Notifications are enabled!');
-      } else if (Notification.permission === 'denied') {
-        showToast('Blocked — enable in browser settings');
-      } else {
-        showNotifPrompt();
-      }
+      if (!('Notification' in window)) { showToast('Not supported'); return; }
+      if (Notification.permission === 'granted') { showToast('Notifications enabled!'); return; }
+      if (Notification.permission === 'denied') { showToast('Blocked — check browser settings'); return; }
+      showNotifPrompt();
     }
 
-    function showNotifPrompt() {
-      document.getElementById('notifPrompt').classList.add('show');
-    }
-
-    function dismissNotifPrompt() {
-      document.getElementById('notifPrompt').classList.remove('show');
-    }
+    function showNotifPrompt() { document.getElementById('notifPrompt').classList.add('show'); }
+    function dismissNotifPrompt() { document.getElementById('notifPrompt').classList.remove('show'); }
 
     async function enableNotifications() {
       dismissNotifPrompt();
@@ -1070,23 +598,17 @@
         if (perm === 'granted') {
           showToast('Notifications enabled!');
           if ('serviceWorker' in navigator) {
-            const reg = await navigator.serviceWorker.ready;
-            console.log('Push ready. Configure VAPID keys for production.');
+            await navigator.serviceWorker.ready;
           }
         } else {
           showToast('Permission denied');
         }
-      } catch (e) {
-        showToast('Could not enable notifications');
-      }
+      } catch (e) { showToast('Could not enable notifications'); }
     }
 
-    // Auto-prompt after 8 seconds
     setTimeout(() => {
-      if ('Notification' in window && Notification.permission === 'default') {
-        showNotifPrompt();
-      }
-    }, 8000);
+      if ('Notification' in window && Notification.permission === 'default') showNotifPrompt();
+    }, 10000);
 
     // ── TOAST ──
     function showToast(msg) {
@@ -1104,6 +626,9 @@
           .catch(e => console.log('SW failed:', e));
       });
     }
+
+    // ── START ──
+    init();
   </script>
 </body>
 </html>
