@@ -47,20 +47,9 @@
       user-select: none;
     }
 
-    /* ── HEADER ── */
+    /* ── HEADER (hidden) ── */
     .app-header {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      height: calc(var(--header-height) + var(--safe-top));
-      padding-top: var(--safe-top);
-      background: var(--bg-primary);
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-left: 12px;
-      padding-right: 12px;
-      z-index: 1000;
+      display: none;
     }
 
     .header-left {
@@ -107,9 +96,9 @@
     /* ── IFRAME ── */
     .content-frame {
       position: fixed;
-      top: calc(var(--header-height) + var(--safe-top));
+      top: 0;
       left: 0; right: 0;
-      bottom: calc(var(--nav-height) + var(--safe-bottom));
+      bottom: 0;
       border: none;
       width: 100%;
       height: 100%;
@@ -119,9 +108,9 @@
     /* ── LOADING ── */
     .loading-overlay {
       position: fixed;
-      top: calc(var(--header-height) + var(--safe-top));
+      top: 0;
       left: 0; right: 0;
-      bottom: calc(var(--nav-height) + var(--safe-bottom));
+      bottom: 0;
       background: var(--bg-primary);
       display: flex;
       flex-direction: column;
@@ -155,41 +144,79 @@
     /* ── BOTTOM NAV ── */
     .bottom-nav {
       position: fixed;
-      bottom: 0; left: 0; right: 0;
-      height: calc(var(--nav-height) + var(--safe-bottom));
-      padding-bottom: var(--safe-bottom);
-      background: rgba(27, 27, 27, 0.94);
-      -webkit-backdrop-filter: blur(20px);
-      backdrop-filter: blur(20px);
-      border-top: 1px solid rgba(255,255,255,0.08);
+      bottom: calc(14px + var(--safe-bottom));
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 32px);
+      max-width: 400px;
+      height: 62px;
+      background: rgba(15, 25, 50, 0.75);
+      -webkit-backdrop-filter: blur(28px) saturate(1.4);
+      backdrop-filter: blur(28px) saturate(1.4);
+      border: 1px solid rgba(100, 140, 200, 0.18);
+      border-radius: 99px;
       display: flex;
       align-items: center;
       justify-content: space-around;
       z-index: 1000;
+      box-shadow: 0 8px 32px rgba(0, 10, 30, 0.5), inset 0 1px 0 rgba(255,255,255,0.06);
+      padding: 6px;
+      position: relative;
     }
 
     .nav-item {
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 3px;
-      padding: 6px 14px;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 14px;
       border: none;
       background: none;
-      color: var(--text-secondary);
+      color: rgba(160, 180, 210, 0.55);
       cursor: pointer;
-      transition: color 0.2s;
+      transition: color 0.35s ease;
       -webkit-tap-highlight-color: transparent;
+      border-radius: 99px;
+      position: relative;
+      z-index: 2;
     }
 
-    .nav-item.active { color: var(--accent); }
-    .nav-item:active { transform: scale(0.9); }
-    .nav-item svg { width: 24px; height: 24px; }
+    .nav-item.active {
+      color: #ffffff;
+    }
+
+    .nav-item:not(.active):active { transform: scale(0.85); }
+    .nav-item svg { width: 22px; height: 22px; flex-shrink: 0; }
 
     .nav-label {
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 600;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.2px;
+      max-width: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  opacity 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .nav-item.active .nav-label {
+      max-width: 80px;
+      opacity: 1;
+    }
+
+    /* Sliding pill indicator */
+    .nav-pill {
+      position: absolute;
+      height: calc(100% - 12px);
+      top: 6px;
+      border-radius: 99px;
+      background: rgba(30, 45, 70, 0.85);
+      box-shadow: 0 2px 12px rgba(0, 10, 30, 0.4);
+      z-index: 1;
+      transition: left 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      pointer-events: none;
     }
 
     /* ── SLIDE MENU ── */
@@ -281,7 +308,7 @@
     /* ── NOTIFICATION PROMPT ── */
     .notif-prompt {
       position: fixed;
-      bottom: calc(var(--nav-height) + var(--safe-bottom) + 16px);
+      bottom: calc(84px + var(--safe-bottom));
       left: 16px; right: 16px;
       background: var(--bg-card);
       border-radius: 18px;
@@ -316,7 +343,7 @@
     /* ── TOAST ── */
     .toast {
       position: fixed;
-      top: calc(var(--safe-top) + var(--header-height) + 12px);
+      top: calc(var(--safe-top) + 16px);
       left: 50%;
       transform: translateX(-50%) translateY(-100px);
       background: var(--bg-card);
@@ -380,7 +407,8 @@
   ></iframe>
 
   <!-- ═══ BOTTOM NAV ═══ -->
-  <nav class="bottom-nav">
+  <nav class="bottom-nav" id="bottomNav">
+    <div class="nav-pill" id="navPill"></div>
     <button class="nav-item active" data-path="/" onclick="navigate('/', 'Home', this)">
       <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span class="nav-label">Home</span>
@@ -498,6 +526,8 @@
     const overlay = document.getElementById('loadingOverlay');
     const pageTitle = document.getElementById('pageTitle');
     const backBtn = document.getElementById('backBtn');
+    const navPill = document.getElementById('navPill');
+    const bottomNav = document.getElementById('bottomNav');
 
     // Navigation history for back button
     let navHistory = [];
@@ -521,6 +551,45 @@
       }
     });
 
+    // ── PILL ANIMATION ──
+    function movePill(targetBtn) {
+      if (!targetBtn || !navPill) return;
+
+      // Brief delay to let the label expand, then measure
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          const navRect = bottomNav.getBoundingClientRect();
+          const btnRect = targetBtn.getBoundingClientRect();
+          const left = btnRect.left - navRect.left;
+          const width = btnRect.width;
+          navPill.style.left = left + 'px';
+          navPill.style.width = width + 'px';
+        }, 30);
+      });
+    }
+
+    // Position pill on load
+    window.addEventListener('load', () => {
+      const activeBtn = document.querySelector('.nav-item.active');
+      if (activeBtn) {
+        // No transition on initial position
+        navPill.style.transition = 'none';
+        movePill(activeBtn);
+        // Re-enable transition after paint
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            navPill.style.transition = '';
+          }, 50);
+        });
+      }
+    });
+
+    // Reposition on resize
+    window.addEventListener('resize', () => {
+      const activeBtn = document.querySelector('.nav-item.active');
+      if (activeBtn) movePill(activeBtn);
+    });
+
     // ── NAVIGATION ──
     function navigate(path, title, btn) {
       if (currentPath !== path) {
@@ -534,7 +603,10 @@
 
       // Update bottom nav active state
       document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-      if (btn) btn.classList.add('active');
+      if (btn) {
+        btn.classList.add('active');
+        movePill(btn);
+      }
 
       backBtn.style.display = navHistory.length > 0 ? 'flex' : 'none';
     }
@@ -546,9 +618,11 @@
 
     function goHome() {
       navHistory = [];
-      navigate('/', 'Home');
+      const homeBtn = document.querySelector('.nav-item[data-path="/"]');
       document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-      document.querySelector('.nav-item[data-path="/"]').classList.add('active');
+      homeBtn.classList.add('active');
+      movePill(homeBtn);
+      navigate('/', 'Home', homeBtn);
     }
 
     function goBack() {
