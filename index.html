@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="CSBC">
+  <meta name="theme-color" content="#1b1b1b">
+  <meta name="description" content="Cave Spring Baptist Church — Stay connected with our community.">
+
+  <title>Cave Spring Baptist Church</title>
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-96.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-primary: #1b1b1b;
+      --bg-secondary: #252525;
+      --bg-card: #2a2a2a;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0a0;
+      --accent: #c9a84c;
+      --accent-hover: #d4b85e;
+      --nav-height: 64px;
+      --header-height: 56px;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      overflow: hidden;
+      height: 100vh;
+      height: 100dvh;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    /* ── HEADER ── */
+    .app-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: calc(var(--header-height) + var(--safe-top));
+      padding-top: var(--safe-top);
+      background: var(--bg-primary);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: 16px;
+      padding-right: 16px;
+      z-index: 1000;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .menu-btn {
+      background: none;
+      border: none;
+      color: var(--text-primary);
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .menu-btn:hover { background: rgba(255,255,255,0.08); }
+
+    .header-title {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .header-logo {
+      height: 32px;
+      width: auto;
+    }
+
+    .notification-btn {
+      background: none;
+      border: none;
+      color: var(--text-primary);
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 8px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      transition: background 0.2s;
+    }
+
+    .notification-btn:hover { background: rgba(255,255,255,0.08); }
+
+    .notif-dot {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 8px;
+      height: 8px;
+      background: #e74c3c;
+      border-radius: 50%;
+      display: none;
+    }
+
+    /* ── IFRAME CONTENT ── */
+    .content-frame {
+      position: fixed;
+      top: calc(var(--header-height) + var(--safe-top));
+      left: 0;
+      right: 0;
+      bottom: calc(var(--nav-height) + var(--safe-bottom));
+      border: none;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+    }
+
+    .loading-overlay {
+      position: fixed;
+      top: calc(var(--header-height) + var(--safe-top));
+      left: 0;
+      right: 0;
+      bottom: calc(var(--nav-height) + var(--safe-bottom));
+      background: var(--bg-primary);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 500;
+      transition: opacity 0.3s;
+    }
+
+    .loading-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255,255,255,0.1);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-text {
+      margin-top: 16px;
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    /* ── BOTTOM NAV ── */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: calc(var(--nav-height) + var(--safe-bottom));
+      padding-bottom: var(--safe-bottom);
+      background: var(--bg-secondary);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      z-index: 1000;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 12px;
+      border: none;
+      background: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      border-radius: 12px;
+      transition: all 0.2s;
+      -webkit-tap-highlight-color: transparent;
+      min-width: 56px;
+    }
+
+    .nav-item.active {
+      color: var(--accent);
+    }
+
+    .nav-item:active {
+      transform: scale(0.92);
+    }
+
+    .nav-item svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .nav-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+
+    /* ── SLIDE-OUT MENU ── */
+    .menu-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      -webkit-backdrop-filter: blur(4px);
+      backdrop-filter: blur(4px);
+    }
+
+    .menu-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .slide-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 300px;
+      max-width: 85vw;
+      background: var(--bg-primary);
+      z-index: 2001;
+      transform: translateX(-100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-top: var(--safe-top);
+    }
+
+    .slide-menu.open {
+      transform: translateX(0);
+    }
+
+    .menu-header {
+      padding: 24px 20px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .menu-church-logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      object-fit: cover;
+    }
+
+    .menu-church-info h2 {
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .menu-church-info p {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .menu-section {
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .menu-section-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 8px 20px;
+    }
+
+    .menu-link {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 20px;
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+    }
+
+    .menu-link:hover, .menu-link:active {
+      background: rgba(255,255,255,0.06);
+    }
+
+    .menu-link svg {
+      width: 20px;
+      height: 20px;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+
+    .menu-sub-link {
+      padding-left: 54px;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary);
+    }
+
+    .menu-sub-link:hover {
+      color: var(--text-primary);
+    }
+
+    .menu-footer {
+      padding: 20px;
+      text-align: center;
+    }
+
+    .menu-footer p {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .menu-footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* ── NOTIFICATION PROMPT ── */
+    .notif-prompt {
+      position: fixed;
+      bottom: calc(var(--nav-height) + var(--safe-bottom) + 16px);
+      left: 16px;
+      right: 16px;
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 20px;
+      z-index: 1500;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      transform: translateY(200%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .notif-prompt.show {
+      transform: translateY(0);
+    }
+
+    .notif-prompt h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .notif-prompt p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .notif-prompt-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .notif-prompt-actions button {
+      flex: 1;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-enable {
+      background: var(--accent);
+      color: #000;
+    }
+
+    .btn-enable:hover { background: var(--accent-hover); }
+
+    .btn-dismiss {
+      background: rgba(255,255,255,0.08);
+      color: var(--text-primary);
+    }
+
+    .btn-dismiss:hover { background: rgba(255,255,255,0.12); }
+
+    /* ── EXPANDABLE SECTIONS IN MENU ── */
+    .expandable-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .expand-arrow {
+      transition: transform 0.2s;
+      color: var(--text-secondary);
+    }
+
+    .expand-arrow.rotated {
+      transform: rotate(180deg);
+    }
+
+    .expandable-items {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .expandable-items.expanded {
+      max-height: 500px;
+    }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      top: calc(var(--header-height) + var(--safe-top) + 12px);
+      left: 50%;
+      transform: translateX(-50%) translateY(-100px);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      z-index: 3000;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(255,255,255,0.1);
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="header-left">
+      <button class="menu-btn" onclick="toggleMenu()" aria-label="Menu">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <span class="header-title">CSBC</span>
+    </div>
+    <button class="notification-btn" onclick="requestNotifications()" aria-label="Notifications">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="notif-dot" id="notifDot"></span>
+    </button>
+  </header>
+
+  <!-- LOADING -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <p class="loading-text">Loading CSBC...</p>
+  </div>
+
+  <!-- MAIN CONTENT (IFRAME) -->
+  <iframe
+    id="mainFrame"
+    class="content-frame"
+    src="https://www.csbcroanoke.com"
+    loading="eager"
+    allow="autoplay; fullscreen; encrypted-media"
+    sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-top-navigation"
+    title="Cave Spring Baptist Church"
+  ></iframe>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="navigate('/', this)" aria-label="Home">
+      <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span class="nav-label">Home</span>
+    </button>
+    <button class="nav-item" onclick="navigate('/media/sermons', this)" aria-label="Watch">
+      <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      <span class="nav-label">Watch</span>
+    </button>
+    <button class="nav-item" onclick="navigate('/events', this)" aria-label="Events">
+      <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span class="nav-label">Events</span>
+    </button>
+    <button class="nav-item" onclick="navigate('/about', this)" aria-label="Connect">
+      <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span class="nav-label">Connect</span>
+    </button>
+    <button class="nav-item" onclick="navigate('/give', this)" aria-label="Give">
+      <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      <span class="nav-label">Give</span>
+    </button>
+  </nav>
+
+  <!-- SLIDE-OUT MENU -->
+  <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+  <aside class="slide-menu" id="slideMenu">
+    <div class="menu-header">
+      <img src="https://images.squarespace-cdn.com/content/v1/659d8c7113cb9a4f53b20382/11fdb2ff-6018-441e-aefe-0c03a50c108d/Crew+Logos+%283%29.png?format=100w"
+           alt="CSBC Logo" class="menu-church-logo"
+           onerror="this.style.display='none'">
+      <div class="menu-church-info">
+        <h2>Cave Spring Baptist</h2>
+        <p>Roanoke, VA</p>
+      </div>
+    </div>
+
+    <!-- About Us -->
+    <div class="menu-section">
+      <button class="menu-link" onclick="toggleExpand('aboutItems', this)">
+        <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <span class="expandable-header">
+          About Us
+          <svg class="expand-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </span>
+      </button>
+      <div class="expandable-items" id="aboutItems">
+        <button class="menu-link menu-sub-link" onclick="navigateMenu('/about')">Connect Card</button>
+        <button class="menu-link menu-sub-link" onclick="navigateMenu('/about-us/when-you-visit')">When You Visit</button>
+        <button class="menu-link menu-sub-link" onclick="navigateMenu('/new-page-1')">Who We Are</button>
+        <button class="menu-link menu-sub-link" onclick="navigateMenu('/what-we-believe')">What We Believe</button>
+        <button class="menu-link menu-sub-link" onclick="navigateMenu('/150')">Our History</button>
+        <button class="menu-link menu-sub-link" onclick="navigateMenu('/about-us/our-team')">Our Team</button>
+      </div>
+    </div>
+
+    <!-- Ministries -->
+    <div class="menu-section">
+      <button class="menu-link" onclick="toggleExpand('ministryItems', this)">
+        <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span class="expandable-header">
+          Ministries
+          <svg class="expand-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </span>
+      </button>
+      <div class="expandable-items" id="ministryItems">
+        <button class="menu-link menu-sub-link" onclick="navigateMenu('/ministries-children')">Children</button>
+        <button class="menu-link menu-sub-link" onclick="navigateMenu('/ministries-students')">Students</button>
+        <button class="menu-link menu-sub-link" onclick="navigateMenu('/ministries-adults')">Adults</button>
+        <button class="menu-link menu-sub-link" onclick="navigateMenu('/small-groups')">Small Groups</button>
+        <button class="menu-link menu-sub-link" onclick="navigateMenu('/chinese-fellowship')">Chinese Fellowship</button>
+        <button class="menu-link menu-sub-link" onclick="navigateMenu('/serve')">Serve</button>
+        <button class="menu-link menu-sub-link" onclick="navigateMenu('/missions')">Missions</button>
+        <button class="menu-link menu-sub-link" onclick="navigateMenu('/discipleship')">Discipleship</button>
+      </div>
+    </div>
+
+    <!-- Events -->
+    <div class="menu-section">
+      <button class="menu-link" onclick="toggleExpand('eventItems', this)">
+        <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span class="expandable-header">
+          Events
+          <svg class="expand-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </span>
+      </button>
+      <div class="expandable-items" id="eventItems">
+        <button class="menu-link menu-sub-link" onclick="navigateMenu('/calendar')">Calendar</button>
+        <button class="menu-link menu-sub-link" onclick="navigateMenu('/events')">Upcoming Events</button>
+      </div>
+    </div>
+
+    <!-- Future Leaders -->
+    <div class="menu-section">
+      <button class="menu-link" onclick="toggleExpand('leaderItems', this)">
+        <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <span class="expandable-header">
+          Future Leaders
+          <svg class="expand-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </span>
+      </button>
+      <div class="expandable-items" id="leaderItems">
+        <button class="menu-link menu-sub-link" onclick="navigateMenu('/apprenticeship')">Apprenticeship</button>
+        <button class="menu-link menu-sub-link" onclick="navigateMenu('/summer-internships')">Summer Internships</button>
+      </div>
+    </div>
+
+    <!-- Media -->
+    <div class="menu-section">
+      <button class="menu-link" onclick="toggleExpand('mediaItems', this)">
+        <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <span class="expandable-header">
+          Media
+          <svg class="expand-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </span>
+      </button>
+      <div class="expandable-items" id="mediaItems">
+        <button class="menu-link menu-sub-link" onclick="navigateMenu('/media/sermons')">Messages</button>
+        <button class="menu-link menu-sub-link" onclick="navigateMenu('/testimonies')">Testimonies</button>
+        <button class="menu-link menu-sub-link" onclick="navigateMenu('/ministries/worship')">Music</button>
+        <button class="menu-link menu-sub-link" onclick="navigateMenu('/spiritual-growth')">Spiritual Growth</button>
+        <button class="menu-link menu-sub-link" onclick="navigateMenu('/digitalresources')">Digital Resources</button>
+      </div>
+    </div>
+
+    <!-- Direct Links -->
+    <div class="menu-section">
+      <button class="menu-link" onclick="navigateMenu('/give')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Give
+      </button>
+      <a class="menu-link" href="https://csbcroanoke.printful.me/" target="_blank" rel="noopener">
+        <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Merch
+      </a>
+    </div>
+
+    <!-- Contact Footer -->
+    <div class="menu-footer">
+      <p>
+        <strong>Sunday Worship</strong><br>
+        8:30am &amp; 11:00am<br><br>
+        4873 Brambleton Ave.<br>
+        Roanoke, VA 24018<br><br>
+        <a href="tel:5409896136">(540) 989-6136</a><br>
+        <a href="mailto:info@csbcroanoke.com">info@csbcroanoke.com</a>
+      </p>
+    </div>
+  </aside>
+
+  <!-- NOTIFICATION PROMPT -->
+  <div class="notif-prompt" id="notifPrompt">
+    <h3>Stay Connected</h3>
+    <p>Get notified about services, events, and updates from Cave Spring Baptist Church.</p>
+    <div class="notif-prompt-actions">
+      <button class="btn-dismiss" onclick="dismissNotifPrompt()">Not Now</button>
+      <button class="btn-enable" onclick="enableNotifications()">Enable</button>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ── CONFIG ──
+    const BASE_URL = 'https://www.csbcroanoke.com';
+
+    // ── IFRAME LOADING ──
+    const frame = document.getElementById('mainFrame');
+    const overlay = document.getElementById('loadingOverlay');
+
+    frame.addEventListener('load', () => {
+      setTimeout(() => overlay.classList.add('hidden'), 300);
+    });
+
+    // ── NAVIGATION ──
+    function navigate(path, btn) {
+      overlay.classList.remove('hidden');
+      frame.src = BASE_URL + path;
+
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+    }
+
+    function navigateMenu(path) {
+      toggleMenu();
+      overlay.classList.remove('hidden');
+      frame.src = BASE_URL + path;
+
+      // Update bottom nav active state
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+    }
+
+    // ── MENU ──
+    function toggleMenu() {
+      document.getElementById('menuOverlay').classList.toggle('open');
+      document.getElementById('slideMenu').classList.toggle('open');
+    }
+
+    function toggleExpand(id, btn) {
+      const items = document.getElementById(id);
+      const arrow = btn.querySelector('.expand-arrow');
+      items.classList.toggle('expanded');
+      arrow.classList.toggle('rotated');
+    }
+
+    // ── NOTIFICATIONS ──
+    let notifPromptShown = false;
+
+    function requestNotifications() {
+      if ('Notification' in window) {
+        if (Notification.permission === 'granted') {
+          showToast('Notifications are enabled!');
+        } else if (Notification.permission === 'denied') {
+          showToast('Notifications blocked. Enable in browser settings.');
+        } else {
+          showNotifPrompt();
+        }
+      } else {
+        showToast('Notifications not supported on this device.');
+      }
+    }
+
+    function showNotifPrompt() {
+      document.getElementById('notifPrompt').classList.add('show');
+    }
+
+    function dismissNotifPrompt() {
+      document.getElementById('notifPrompt').classList.remove('show');
+    }
+
+    async function enableNotifications() {
+      dismissNotifPrompt();
+      try {
+        const permission = await Notification.requestPermission();
+        if (permission === 'granted') {
+          showToast('Notifications enabled!');
+
+          // Register push subscription if service worker is ready
+          if ('serviceWorker' in navigator) {
+            const reg = await navigator.serviceWorker.ready;
+            // In production, you'd subscribe to push here with your VAPID key
+            // const sub = await reg.pushManager.subscribe({ ... });
+            // Then send `sub` to your backend
+            console.log('Push notification ready. Configure VAPID keys for production.');
+          }
+        } else {
+          showToast('Notification permission denied.');
+        }
+      } catch (err) {
+        console.error('Notification error:', err);
+        showToast('Could not enable notifications.');
+      }
+    }
+
+    // Auto-prompt after 10 seconds on first visit
+    setTimeout(() => {
+      if ('Notification' in window && Notification.permission === 'default' && !notifPromptShown) {
+        notifPromptShown = true;
+        showNotifPrompt();
+      }
+    }, 10000);
+
+    // ── TOAST ──
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    // ── SERVICE WORKER REGISTRATION ──
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(reg => console.log('SW registered:', reg.scope))
+          .catch(err => console.log('SW registration failed:', err));
+      });
+    }
+  </script>
+</body>
+</html>
